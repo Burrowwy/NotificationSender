@@ -5,7 +5,7 @@
  * Do NOT edit it manually. Run `php artisan openapi:generate-server`.
  */
 
-use App\Http\ApiV1\Modules\Foos\Controllers\FoosController;
+use App\Http\ApiV1\Modules\Notifications\Controllers\NotificationsController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('examples/{id}', [FoosController::class, 'get'])->name('getExample');
+Route::post('notifications', [NotificationsController::class, 'post'])->name('postNotification');

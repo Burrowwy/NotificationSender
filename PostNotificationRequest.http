@@ -1,0 +1,19 @@
+POST http://127.0.0.1:8000/api/v1/notifications
+Accept: application/json
+Content-Type: application/json
+
+{
+    "notification": {
+        "client_info":{
+            "client_name": "string",
+            "phone": "+71111111111",
+            "email": "user@example.com"
+        },
+        "status_info":{
+            "order_name": "string",
+            "status": "accepted",
+            "current_location": "string",
+            "updated_at": "2024-04-11T14:04:40.000000Z"
+        }
+    }
+}

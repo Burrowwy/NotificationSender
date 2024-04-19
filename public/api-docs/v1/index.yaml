@@ -1,77 +1,108 @@
-openapi: 3.0.3
+openapi: "3.0.0"
 info:
-  title: Ensi Backend Skeleton (Replace me)
+  version: 1.0.0
+  title: NotificationSender API
   contact:
     name: API Support
-    url: https://ensi.tech/contacts
-    email: mail@greensight.ru
-  version: 1.0.0
-  description: Ensi Backend Skeleton Description (Replace me)
+    url: https://non.existing/contacts
+    email: mail@miet.ru
+  description: NotificationSender responsible for sending email (mb sms) notifications about delivery status change to client.
 servers:
   - url: /api/v1
+    description: NotificationSender service.
 tags:
-  - name: examples
-    description: Тэг-пример
+  - name: statusChangedNotification
+    description: Order deliveries status changed related actions tag
 paths:
-  /examples/{id}:
-    get:
-      tags:
-        - examples
-      operationId: getExample
-      x-lg-handler: 'App\Http\ApiV1\Modules\Foos\Controllers\FoosController@get'
-      x-lg-route-name: 'getExample'
+  /notifications:
+    post:
+      summary: Send request for notification
+      x-lg-handler: 'App\Http\ApiV1\Modules\Notifications\Controllers\NotificationsController@post'
+      x-lg-route-name: 'postNotification'
       x-lg-skip-request-generation: true
-      summary: Получение объекта типа Example
-      description: Получение объекта типа Example
-      parameters:
-        - $ref: '#/components/parameters/PathId'
-        - $ref: '#/components/parameters/QueryInclude'
+      description: Send request for notification about delivery status changed
+      operationId: postStatusChangedNotification
+      tags:
+        - statusChangedNotification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Notification"
       responses:
-        #"200":
-          #description: Успешный ответ
-          # content:
-          #  application/json:
-          #    schema:
-          #      $ref: './customers.yaml#/CustomerResponse'
-        "404":
-          $ref: '#/components/responses/NotFound'
-        "500":
-          $ref: '#/components/responses/ServerError'
+        '201':
+          description: Notification request successfully sent
+        '400':
+          description: Bad request received
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        'default':
+          description: Unexpected status code received
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
-  parameters:
-    QueryInclude:
-      $ref: './common_parameters.yaml#/QueryInclude'
-    PathId:
-      $ref: './common_parameters.yaml#/PathId'
   schemas:
-    EmptyDataResponse:
+    ClientInfo:
       type: object
-      properties:
-        data:
-          type: object
-          nullable: true
-        meta:
-          type: object
       required:
-          - data
-    PaginationTypeEnum:
-      $ref: './common_schemas.yaml#/PaginationTypeEnum'
-  responses:
-    BadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: './errors.yaml#/ErrorResponse'
-    NotFound:
-      description: Not Found
-      content:
-        application/json:
-          schema:
-            $ref: './errors.yaml#/ErrorResponse'
-    ServerError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: './errors.yaml#/ErrorResponse'
+        - client_name
+        - phone
+        - email
+      properties:
+        client_name:
+          type: string
+        phone:
+          type: string
+          format: phone
+          pattern: 7\d{10}
+        email:
+          type: string
+          format: email
+    StatusInfo:
+      type: object
+      required:
+        - order_name
+        - status
+        - current_location
+        - updated_at
+      properties:
+        order_name:
+          type: string
+        status:
+          type: string
+          enum:
+            - accepted
+            - processing
+            - in_transit
+            - delivered
+            - picked_up
+        current_location:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+    Notification:
+      type: object
+      required:
+        - client_info
+        - status_info
+      properties:
+        client_info:
+          $ref: '#/components/schemas/ClientInfo'
+        status_info:
+          $ref: '#/components/schemas/StatusInfo'
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
