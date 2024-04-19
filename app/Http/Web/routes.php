@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmailController;
 use App\Http\Web\Controllers\HealthCheck;
 use App\Http\Web\Controllers\OasController;
 use Illuminate\Support\Facades\Route;
