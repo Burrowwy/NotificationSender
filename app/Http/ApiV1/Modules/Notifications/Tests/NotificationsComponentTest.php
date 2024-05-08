@@ -7,8 +7,8 @@ use function Pest\Laravel\post;
 uses(ApiV1ComponentTestCase::class);
 uses()->group('component');
 
-test('POST http://localhost:8001/NotificationSender/v1/notifications 201', function () {
-    post('http://localhost:8001/NotificationSender/v1/notifications')
+test('POST http://localhost:8002/NotificationSender/v1/notifications 201', function () {
+    post('http://localhost:8002/NotificationSender/v1/notifications')
         ->assertStatus(201);
 });
 
