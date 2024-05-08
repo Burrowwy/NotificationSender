@@ -26,7 +26,7 @@ class NotificationOrders
             "Data updated: $data_time";
 
 
-        //Mail::to($to)->send(new OrderShipped($subject, $msg));
+        Mail::to($to)->send(new OrderShipped($subject, $msg));
 
 
         return response()->json([
