@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Mail;
 
 class NotificationOrders
 {
-    public static function notification(PostStatusChangedNotificationRequest $request): \Illuminate\Http\JsonResponse
+    public static function notification($request): void
     {
         $req_arr = $request->toArray();
         $client_info = $req_arr['client_info'];
@@ -27,10 +27,5 @@ class NotificationOrders
 
 
         Mail::to($to)->send(new OrderShipped($subject, $msg));
-
-
-        return response()->json([
-            'message' => 'Данные успешно получены',
-        ], 200);
     }
 }
