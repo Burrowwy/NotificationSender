@@ -26,6 +26,8 @@ class NotificationOrders
             "Data updated: $data_time";
 
 
-        Mail::to($to)->send(new OrderShipped($subject, $msg));
+        error_log('notification sent !!');
+        error_log($msg);
+        #Mail::to($to)->send(new OrderShipped($subject, $msg));
     }
 }
