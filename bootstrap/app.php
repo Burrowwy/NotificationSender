@@ -13,6 +13,7 @@ ini_set('serialize_precision', -1); // https://stackoverflow.com/questions/42981
 |
 */
 
+
 $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
@@ -30,7 +31,7 @@ require __DIR__ . '/environment.php';
 | incoming requests to this application from both the web and CLI.
 |
 */
-
+$app->register(Illuminate\Mail\MailServiceProvider::class);
 $app->singleton(
     Illuminate\Contracts\Http\Kernel::class,
     App\Http\Kernel::class
